@@ -1,7 +1,12 @@
 # pubsub
-package main
+
+install
+```
+go get github.com/qosimmax/pubsub
+```
 
 ```go
+
 import (
 	"context"
 	"fmt"
