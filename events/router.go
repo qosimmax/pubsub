@@ -54,29 +54,30 @@ func (r *Router) AddNoPublisherHandler(topic string, handler HandlerFunc) {
 }
 
 func (r *Router) Run() error {
+	c := context.Background()
 	for topic, _ := range r.handlers {
 		r.wg.Add(1)
-		go r.subscribe(topic)
+		go r.subscribe(c, topic)
 	}
 	r.wg.Wait()
 	return nil
 }
 
-func (r *Router) subscribe(topic string) {
+func (r *Router) subscribe(c context.Context, topic string) {
 	for {
-		data, err := r.subscriber.Subscribe(context.Background(), topic)
+		data, err := r.subscriber.Subscribe(c, topic)
 		if err != nil {
 			fmt.Println(err)
 			time.Sleep(50 * time.Millisecond)
 		}
 
-		resp, err := r.handlers[topic](context.Background(), data)
+		resp, err := r.handlers[topic](c, data)
 		if err != nil {
 			fmt.Println(err)
 		}
 
 		if publisherTopic, ok := r.publisherTopics[topic]; ok {
-			err = r.publisher.Publish(context.Background(), publisherTopic, resp)
+			err = r.publisher.Publish(c, publisherTopic, resp)
 			if err != nil {
 				fmt.Println(err)
 			}
