@@ -1,7 +1,7 @@
 # pubsub
 package main
 
-```
+```go
 import (
 	"context"
 	"fmt"
