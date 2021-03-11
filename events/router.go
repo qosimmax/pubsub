@@ -67,7 +67,7 @@ func (r *Router) subscribe(c context.Context, topic string) {
 	for {
 		data, err := r.subscriber.Subscribe(c, topic)
 		if err != nil {
-			fmt.Println("consume error", err)
+			fmt.Println("consume error:", err)
 			time.Sleep(50 * time.Millisecond)
 			continue
 		}
